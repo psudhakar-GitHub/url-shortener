@@ -1,4 +1,3 @@
-// create express app listening on port 5000 with body parser middleware
 var express = require("express");
 var app = express();
 var bodyParser = require("body-parser");
@@ -26,7 +25,6 @@ app.use(bodyParser.json());
 app.set("view engine", "ejs");
 
 app.get("/", async (_req, res) => {
-  // list all URLs from mongoose
   let urls = await ShortenURL.find({});
   urls = urls.map((url) => {
     return {
@@ -46,7 +44,6 @@ app.post(
     const fullUrl = req.body.url;
     if (!fullUrl) res.sendStatus(404);
 
-    // use shorturl function
     const sUrl = nanoid(6);
 
     const newItem = {
@@ -54,7 +51,6 @@ app.post(
       short: sUrl,
     };
 
-    // create an object using mongoose
     const shortenURL = new ShortenURL(newItem);
     await shortenURL.save();
 
@@ -63,7 +59,6 @@ app.post(
 );
 
 app.get("/:short", async (req, res) => {
-  // findOne
   const foundUrl = await ShortenURL.findOne({ short: req.params.short });
   if (!foundUrl) res.sendStatus(500);
 
